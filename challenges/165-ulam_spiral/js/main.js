@@ -5,13 +5,15 @@ let dots = [];
 let step = 1;
 let totalSteps;
 
-let stepSize = 5;
+let stepSize = 10;
 
 let state = 0;
 let numSteps = 1;
 let turnCounter = 1;
 
 let i = 0;
+
+let px, py;
 
 function seive(num) {
     const numArr = new Array(num + 1);
@@ -31,21 +33,23 @@ function seive(num) {
     }, []);
 }
 
-
 document.addEventListener("DOMContentLoaded", function (_) {
     let canvas = new Canvas(document.getElementById("canvas"), "#111111");
 
     const width = Math.ceil(canvas.width);
     const height = Math.ceil(canvas.height);
-    
+
     x = width / 2;
     y = height / 2;
-    
-    const cols = width/stepSize;
-    const rows = height/stepSize;
-    
-    totalSteps = Math.floor(cols*rows*2);
-    
+
+    px = x;
+    py = y;
+
+    const cols = width / stepSize;
+    const rows = height / stepSize;
+
+    totalSteps = Math.floor(cols * rows * 2);
+
     let primes = seive(totalSteps); // this is root
     while (step < totalSteps) {
         switch (state) {
@@ -72,15 +76,22 @@ document.addEventListener("DOMContentLoaded", function (_) {
                 numSteps++;
             }
         }
-        if(step == primes[i]) {
-            let dot = new Dot(x, y);
+        let dot = new Dot(x, y);
+        canvas.draw(
+            function () {
+                dot.joiningLine(this, x, y, px, py);
+            }.bind(canvas)
+        );
+        if (step == primes[i]) {
             canvas.draw(
                 function () {
                     dot.draw(this);
                 }.bind(canvas)
             );
-            i++;    
+            i++;
         }
+        px = x;
+        py = y;
         step++;
     }
 });

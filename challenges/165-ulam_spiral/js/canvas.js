@@ -52,12 +52,8 @@ class Canvas {
     }
 
     draw(func) {
-        setInterval(
-            function () {
-                func();
-            }.bind(this),
-            1000 / this._fps
-        );
+        // only this is static, set interval was to run this n number of times
+        func();
     }
 
     setup() {
